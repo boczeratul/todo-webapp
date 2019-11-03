@@ -7,12 +7,14 @@ import {
   CLEAR_COMPLETED
 } from '../constants/ActionTypes'
 
+const address = prompt("Enter contract address", "0x");
+
 const initialState = [
-  {
-    text: 'Use Redux',
-    completed: false,
-    id: 0
-  }
+  // {
+  //   text: 'Use Redux',
+  //   completed: false,
+  //   id: 0
+  // }
 ]
 
 export default function todos(state = initialState, action) {
