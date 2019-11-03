@@ -15,7 +15,6 @@ const MainSection = ({ todosCount, completedCount, actions }) =>
             checked={completedCount === todosCount}
             readOnly
           />
-          <label onClick={actions.completeAllTodos}/>
         </span>
       }
       <VisibleTodoList />

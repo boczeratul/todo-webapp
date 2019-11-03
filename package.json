@@ -9,13 +9,15 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "prop-types": "^15.7.2",
+    "query-string": "^6.8.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.0.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "todomvc-app-css": "^2.2.0"
+    "todomvc-app-css": "^2.2.0",
+    "web3": "^1.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

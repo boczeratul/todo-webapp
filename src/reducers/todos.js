@@ -7,14 +7,7 @@ import {
   CLEAR_COMPLETED
 } from '../constants/ActionTypes'
 
-const address = prompt("Enter contract address", "0x");
-
 const initialState = [
-  // {
-  //   text: 'Use Redux',
-  //   completed: false,
-  //   id: 0
-  // }
 ]
 
 export default function todos(state = initialState, action) {
@@ -24,7 +17,7 @@ export default function todos(state = initialState, action) {
         ...state,
         {
           id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
-          completed: false,
+          completed: action.completed,
           text: action.text
         }
       ]
@@ -44,7 +37,7 @@ export default function todos(state = initialState, action) {
     case COMPLETE_TODO:
       return state.map(todo =>
         todo.id === action.id ?
-          { ...todo, completed: !todo.completed } :
+          { ...todo, completed: action.completed } :
           todo
       )
 
