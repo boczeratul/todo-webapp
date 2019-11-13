@@ -39,8 +39,11 @@ export default class TodoItem extends Component {
           <input className="toggle"
                  type="checkbox"
                  checked={todo.completed}
-                 onChange={() => completeTodo(todo.id, !todo.completed)} />
+                 onChange={() => !todo.completed && completeTodo(todo.id, !todo.completed)} />
           <label onDoubleClick={this.handleDoubleClick}>
+            <span className="bounty">
+              {todo.bounty} TAN
+            </span>
             {todo.text}
           </label>
         </div>

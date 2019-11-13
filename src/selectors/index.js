@@ -29,3 +29,5 @@ export const getCompletedTodoCount = createSelector(
     )
   )
 )
+
+export const getKarma = state => state.karma

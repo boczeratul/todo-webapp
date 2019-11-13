@@ -1,32 +1,104 @@
 import { parse } from 'query-string';
 import * as types from '../constants/ActionTypes'
-import { getContract, address } from '../services'
+import { getContract, getToken, address, web3 } from '../services'
 
 let contract;
+let token;
 
 export const initApp = () => 
     (dispatch) => {
-        let address = parse(window.location.search).address
+        let contractAddress = parse(window.location.search).address
 
-        if (!address) {
-            address = prompt("Enter contract address", "0x");
+        if (!contractAddress) {
+            contractAddress = prompt("Enter contract address", "0x");
         }
         
-        contract = getContract(address);
+        contract = getContract(contractAddress);
         contract.methods.getItems()
             .call()
             .then(items => {
-                items.forEach(item => dispatch({ type: types.ADD_TODO, ...item }))
+                items.forEach(({ text, completed, bounty }) => dispatch({
+                    type: types.ADD_TODO,
+                    text,
+                    completed,
+                    bounty: web3.utils.fromWei(bounty)
+                }))
+            })
+
+        contract.events.AddItem()
+            .on('data', event => {
+                if (!event) {
+                    return;
+                }
+
+                const {
+                    _text: text,
+                    _bounty: bounty,
+                } = event.returnValues;
+
+                dispatch({
+                    type: types.ADD_TODO,
+                    text,
+                    completed: false,
+                    bounty: web3.utils.fromWei(bounty)
+                })
+            })
+
+        contract.events.CompleteItem()
+            .on('data', event => {
+                if (!event) {
+                    return;
+                }
+
+                const {
+                    _index: id,
+                } = event.returnValues;
+                console.log(event)
+
+                dispatch({
+                    type: types.COMPLETE_TODO,
+                    id: Number(id),
+                    completed: true,
+                })
+            })
+
+        contract.methods.tokenAddress()
+            .call()
+            .then(tokenAddress => {
+                token = getToken(tokenAddress);
+                token.methods.balanceOf(address)
+                    .call()
+                    .then(balance => dispatch(updateKarma(web3.utils.fromWei(balance))))
+
+                token.events.Transfer()
+                    .on('data', event => {
+                        if (!event) {
+                            return;
+                        }
+        
+                        token.methods.balanceOf(address)
+                            .call()
+                            .then(balance => dispatch(updateKarma(web3.utils.fromWei(balance))))
+                    })
             })
     }
 
 export const addTodo = (text) =>
     (dispatch) => {
+        const bounty = prompt("Enter bounty amount", "0");
         contract.methods.addItem(text)
-            .send({ from: address })
-            .then(() =>
-                dispatch({ type: types.ADD_TODO, text, completed: false })
-            )
+            .send({
+                from: address,
+                value: web3.utils.toWei(bounty),
+            })
+            // .then(() =>
+            //     dispatch({
+            //         type: types.ADD_TODO,
+            //         text,
+            //         completed: false,
+            //         bounty
+            //     })
+            // )
     }
 
 export const editTodo = (id, text) => 
@@ -40,11 +112,13 @@ export const editTodo = (id, text) =>
 
 export const completeTodo = (id, completed) =>
     (dispatch) => {
-        contract.methods.updateItemState(id, completed)
+        contract.methods.completeItem(id)
             .send({ from: address })
-            .then(() =>
-                dispatch({ type: types.COMPLETE_TODO, id, completed })
-            )
+            // .then(() =>
+            //     dispatch({ type: types.COMPLETE_TODO, id, completed })
+            // )
     }
 
 export const setVisibilityFilter = filter => ({ type: types.SET_VISIBILITY_FILTER, filter})
+
+export const updateKarma = karma => ({ type: types.UPDATE_KARMA, karma })

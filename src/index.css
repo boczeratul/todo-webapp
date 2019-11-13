@@ -1,0 +1,33 @@
+.todo-list li .toggle {
+	cursor: pointer;
+}
+
+.todo-list li.completed .toggle {
+	cursor: default;
+}
+
+.todo-list li label {
+    display: flex;
+    align-items: center;
+}
+
+.todo-list li .bounty {
+    font-size: 14px;
+    font-weight: 400;
+    margin-right: 10px;
+    padding: 5px 8px;
+    border-radius: 4px;
+    background-color: #b83f45;
+	color: white;
+}
+
+.todo-list li.completed .bounty {
+	background-color: #cc9a9a;
+}
+
+.karma-count {
+	float: right;
+	position: relative;
+	line-height: 20px;
+	text-decoration: none;
+}

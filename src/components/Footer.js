@@ -10,7 +10,7 @@ const FILTER_TITLES = {
 }
 
 const Footer = (props) => {
-  const { activeCount } = props
+  const { activeCount, karma } = props
   const itemWord = activeCount === 1 ? 'item' : 'items'
   return (
     <footer className="footer">
@@ -26,6 +26,9 @@ const Footer = (props) => {
           </li>
         )}
       </ul>
+      <span className="karma-count">
+        {karma} Karma
+      </span>
     </footer>
   )
 }
