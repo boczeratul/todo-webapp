@@ -34,10 +34,12 @@ export const initApp = () =>
                 const {
                     _text: text,
                     _bounty: bounty,
+                    _index: id,
                 } = event.returnValues;
 
                 dispatch({
                     type: types.ADD_TODO,
+                    id,
                     text,
                     completed: false,
                     bounty: web3.utils.fromWei(bounty)
