@@ -1,20 +1,11 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
-import thunk from 'redux-thunk'
-import { Provider } from 'react-redux'
-import App from './components/App'
-import reducer from './reducers'
-import { initApp } from './actions'
-import 'todomvc-app-css/index.css'
+import Web3 from 'web3';
+import './index.css'
 
-const store = createStore(reducer, applyMiddleware(thunk))
-
-store.dispatch(initApp())
+window.web3 = new Web3(window.ethereum);
 
 render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <iframe src="https://web3js.readthedocs.io/en/v1.2.0/web3.html" />,
   document.getElementById('root')
 )
