@@ -26,3 +26,8 @@ Your app is ready to be deployed!
 ### `npm run test:contract`
 
 Compiles and tests the contracts with Truffle.
+
+### `npm run deploy`
+
+Deploy contract to Tangerine testnet.<br>
+You need to create a file `.secret` and put your 12-word mnemonic phrases in it.
