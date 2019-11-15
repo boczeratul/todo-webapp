@@ -93,14 +93,6 @@ export const addTodo = (text) =>
                 from: address,
                 value: web3.utils.toWei(bounty),
             })
-            // .then(() =>
-            //     dispatch({
-            //         type: types.ADD_TODO,
-            //         text,
-            //         completed: false,
-            //         bounty
-            //     })
-            // )
     }
 
 export const editTodo = (id, text) => 
@@ -116,9 +108,6 @@ export const completeTodo = (id, completed) =>
     (dispatch) => {
         contract.methods.completeItem(id)
             .send({ from: address })
-            // .then(() =>
-            //     dispatch({ type: types.COMPLETE_TODO, id, completed })
-            // )
     }
 
 export const setVisibilityFilter = filter => ({ type: types.SET_VISIBILITY_FILTER, filter})
