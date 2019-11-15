@@ -23,36 +23,36 @@ contract Todos {
     KarmaToken private token;
     address public tokenAddress;
     TodoItem[] todos;
-    
+
     event AddItem(
         uint indexed _index,
         string _text,
         uint _bounty
     );
-    
+
     event CompleteItem(
         uint indexed _index,
         string _text,
         uint _bounty
     );
-    
+
     constructor () public {
         token = new KarmaToken();
         tokenAddress = address(token);
     }
-    
+
     // check that index falls withing todo list range
     modifier checkIndex(uint indexItem) {
-        require(indexItem < todos.length);
+        require(indexItem < todos.length, "out of range");
         _;
     }
-    
+
     // check that item is not completed
     modifier checkAvailability(uint indexItem) {
-        require(todos[indexItem].completed == false);
+        require(todos[indexItem].completed == false, "item already completed");
         _;
     }
-    
+
     // add a new todo item with bounty
     function addItem(string memory text)
         public
@@ -60,10 +60,10 @@ contract Todos {
     {
         TodoItem memory todoItem = TodoItem(text, false, msg.value);
         todos.push(todoItem);
-        
+
         emit AddItem(todos.length - 1, text, msg.value);
     }
-    
+
     // get the total count of todo items
     function getItemCount()
         public
@@ -72,17 +72,17 @@ contract Todos {
     {
         return todos.length;
     }
-    
+
     // get a single todo item by index
-    function getItem(uint indexItem) 
-        checkIndex(indexItem)
+    function getItem(uint indexItem)
         public
+        checkIndex(indexItem)
         view
         returns(TodoItem memory todoItem)
     {
         return todos[indexItem];
     }
-    
+
     // get all todo items
     function getItems()
         public
@@ -91,26 +91,26 @@ contract Todos {
     {
         return todos;
     }
-    
+
     // update the text of a todo item
     function updateItemText(uint indexItem, string memory text)
+        public
         checkIndex(indexItem)
-        public 
     {
         todos[indexItem].text = text;
     }
-    
+
     // update the completeness state of a todo item
     function completeItem(uint indexItem)
+        public
         checkIndex(indexItem)
         checkAvailability(indexItem)
-        public 
     {
         TodoItem storage todoItem = todos[indexItem];
         todoItem.completed = true;
         msg.sender.transfer(todoItem.bounty);
         token.transfer(msg.sender, 1 ether);
-        
+
         emit CompleteItem(indexItem, todoItem.text, todoItem.bounty);
     }
 }
