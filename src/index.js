@@ -7,7 +7,7 @@ const testWeb3 = new Web3(window.web3.currentProvider);
 window.web3 = testWeb3;
 
 render(
-  <div>Will trigger batch TX and show responses</div>,
+  <div>Will trigger TX and show responses</div>,
   document.getElementById('root')
 )
 
