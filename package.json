@@ -17,7 +17,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "todomvc-app-css": "^2.2.0",
-    "web3": "^1.2.2"
+    "web3": "1.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
